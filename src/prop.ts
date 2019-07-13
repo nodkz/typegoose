@@ -16,14 +16,17 @@ export type Validator =
   | ValidatorFunction
   | RegExp
   | {
-    validator: ValidatorFunction;
-    message?: string;
-  };
+      validator: ValidatorFunction;
+      message?: string;
+    };
 
 export interface BasePropOptions {
+  type?: any;
   required?: RequiredType;
   enum?: string[] | object;
   default?: any;
+  get?(value: any): any;
+  set?(value: any): any;
   validate?: Validator | Validator[];
   unique?: boolean;
   index?: boolean;
@@ -169,6 +172,10 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     }
   }
 
+  if (rawOptions.type) {
+    Type = rawOptions.type;
+  }
+
   // check for validation inconsistencies
   if (isWithStringValidate(rawOptions) && !isString(Type)) {
     throw new NotStringTypeError(key);
@@ -222,10 +229,12 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     schema[name][key] = {
       ...schema[name][key][0],
       ...options,
-      type: [{
-        ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
-        ...subSchema,
-      }],
+      type: [
+        {
+          ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
+          ...subSchema,
+        },
+      ],
     };
     return;
   }

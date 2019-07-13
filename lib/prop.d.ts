@@ -7,9 +7,12 @@ export declare type Validator = ValidatorFunction | RegExp | {
     message?: string;
 };
 export interface BasePropOptions {
+    type?: any;
     required?: RequiredType;
     enum?: string[] | object;
     default?: any;
+    get?(value: any): any;
+    set?(value: any): any;
     validate?: Validator | Validator[];
     unique?: boolean;
     index?: boolean;
