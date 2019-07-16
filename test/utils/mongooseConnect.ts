@@ -1,7 +1,7 @@
-import { MongoMemoryServer } from 'mongodb-memory-server-global';
+import { MongoMemoryServer } from 'mongodb-memory-server-global-3.6';
 import * as mongoose from 'mongoose';
 
-const mongod = new MongoMemoryServer();
+const mongod = new MongoMemoryServer({ debug: false });
 let isFirst = true;
 /**
  * Make a Connection to MongoDB
